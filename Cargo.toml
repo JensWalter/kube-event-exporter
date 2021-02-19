@@ -1,0 +1,12 @@
+[package]
+name = "kube-event-exporter"
+version = "0.1.0"
+authors = ["Jens Walter <jens@apimeister.com>"]
+edition = "2018"
+
+[dependencies]
+kube = "0.50"
+kube-runtime = "0.50"
+tokio = {version="1", features=["full"]}
+k8s-openapi = { version = "0.11.0", default-features = false, features = ["v1_18"] }
+futures = "0.3"
