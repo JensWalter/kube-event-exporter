@@ -3,9 +3,10 @@ a container which exports kubernetes events to stdout
 
 # Building
 
-* check out the repository
 ```bash
-docker build -t kube-event-exporter
+git clone https://github.com/JensWalter/kube-event-exporter.git
+cd kube-event-exporter
+docker build -t kube-event-exporter .
 ```
 
 # Deployment
