@@ -1,13 +1,17 @@
 use futures::{StreamExt, TryStreamExt};
 use k8s_openapi::api::core::v1::Event;
+use k8s_openapi::apimachinery::pkg::apis::meta::v1::Time;
 use kube::{
   api::{Api, ListParams},
   Client,
 };
 use kube_runtime::{utils::try_flatten_applied, watcher};
+use env_var::env_var;
+use chrono::prelude::*;
 
 #[tokio::main]
 async fn main() -> Result<(),std::io::Error> {
+  let ignore_old_entries = env_var!(optional "IGNORE_OLD_ENTRIES",default: "TRUE");
   let client = Client::try_default().await.expect("getting default client");
 
   let events: Api<Event> = Api::all(client);
@@ -16,14 +20,22 @@ async fn main() -> Result<(),std::io::Error> {
   let mut ew = try_flatten_applied(watcher(events, lp)).boxed();
 
   while let Some(event) = ew.try_next().await.unwrap() {
-    println!("[{:?} {}] {}/{}:{} {} {}"
-                  ,event.metadata.creation_timestamp.unwrap()
-                  ,event.type_.unwrap()
-                  ,event.involved_object.namespace.unwrap()
-                  ,event.involved_object.kind.unwrap()
-                  ,event.involved_object.name.unwrap()
-                  ,event.reason.unwrap()
-                  ,event.message.unwrap());
+    let creation_timestamp: Time = event.metadata.creation_timestamp.unwrap();
+    let creation_seconds = creation_timestamp.0.timestamp();
+    let now_seconds = Utc::now().timestamp();
+    if ignore_old_entries == "TRUE" && creation_seconds > now_seconds-60 {
+      //entry too old
+      continue;
+    }else{    
+      println!("[{} {}] {} [{}] {} {} {}"
+                  ,creation_timestamp.0.to_rfc3339()
+                  ,event.type_.unwrap_or("".to_string())
+                  ,event.involved_object.namespace.unwrap_or("".to_string())
+                  ,event.involved_object.kind.unwrap_or("".to_string())
+                  ,event.involved_object.name.unwrap_or("".to_string())
+                  ,event.reason.unwrap_or("".to_string())
+                  ,event.message.unwrap_or("".to_string()));
+    }
   }
   Ok(())
 }
