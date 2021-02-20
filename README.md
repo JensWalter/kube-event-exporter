@@ -9,6 +9,13 @@ cd kube-event-exporter
 docker build -t kube-event-exporter .
 ```
 
+# Configuration
+
+| variable | values | description |
+|----------|---------|-------------|
+|IGNORE_OLD_ENTRIES| TRUE, FALSE | default: TRUE, do not print entries older then 60 seconds |
+| OUTPUT_FORMAT | PLAIN, JSON | default: PLAIN, print output as plain text |
+
 # Deployment
 
 ```yaml
@@ -40,7 +47,7 @@ spec:
             cpu: "50m"
         image: {image-registry}/kube-event-exporter:latest
       imagePullSecrets:
-      - name: acr.hsdgacrdev
+      - name: cr-secret
 ---
 apiVersion: v1
 kind: ServiceAccount
@@ -56,7 +63,7 @@ rules:
   resources: ["events"]
   verbs: ["get", "watch", "list"]
 ---
-apiVersion: rbac.authorization.k8s.io/v1beta1
+apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
   name: kube-event-reader-clusterrolebinding
@@ -67,5 +74,4 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: kube-event-reader-account
-  namespace: tools
 ```
