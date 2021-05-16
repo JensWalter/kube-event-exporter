@@ -7,10 +7,11 @@ use kube::{
 };
 use kube_runtime::{utils::try_flatten_applied, watcher};
 use env_var::env_var;
+use std::convert::Infallible;
 use chrono::prelude::*;
 
 #[tokio::main]
-async fn main() -> Result<(),std::io::Error> {
+async fn main() -> Result<(),Infallible> {
   let ignore_old_entries = env_var!(optional "IGNORE_OLD_ENTRIES",default: "TRUE");
   let output_format = env_var!(optional "OUTPUT_FORMAT", default: "PLAIN");
   let client = Client::try_default().await.expect("getting default client");
