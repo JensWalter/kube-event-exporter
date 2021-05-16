@@ -1,5 +1,6 @@
 [package]
 name = "kube-event-exporter"
+description = "Watches for kubernetes events and prints them to the console."
 version = "0.1.0"
 authors = ["Jens Walter <jens@apimeister.com>"]
 edition = "2018"
