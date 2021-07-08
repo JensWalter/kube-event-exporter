@@ -1,3 +1,7 @@
+# 0.4.0 2012-07-08
+
+* revert back to building kube with defaults
+
 # 0.3.0 2012-06-20
 
 * update dependencies
