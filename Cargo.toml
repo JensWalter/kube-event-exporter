@@ -10,9 +10,9 @@ repository = "https://github.com/JensWalter/kube-event-exporter/"
 documentation = "https://docs.rs/kube-event-exporter"
 
 [dependencies]
-kube = { version="0.58" }
-kube-runtime = { version="0.58" }
-tokio = { version="1", features=["full"] }
+kube = { version = "0.58" }
+kube-runtime = { version = "0.58" }
+tokio = { version = "1", features = ["full"] }
 k8s-openapi = { version = "0.12.0", default-features = false, features = ["v1_18"] }
 futures = "0.3"
 env-var = "1"

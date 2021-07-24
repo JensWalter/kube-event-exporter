@@ -1,3 +1,7 @@
+# 0.5.0 not yet released
+
+* default event timestamp if no value is present
+
 # 0.4.0 2012-07-08
 
 * revert back to building kube with defaults

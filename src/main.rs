@@ -22,7 +22,7 @@ async fn main() -> Result<(),Infallible> {
   let mut ew = try_flatten_applied(watcher(events, lp)).boxed();
 
   while let Some(event) = ew.try_next().await.unwrap() {
-    let creation_timestamp: Time = event.metadata.creation_timestamp.clone().unwrap();
+    let creation_timestamp: Time = event.metadata.creation_timestamp.clone().unwrap_or(Time(Utc::now()));
     let creation_seconds = creation_timestamp.0.timestamp();
     let now_seconds = Utc::now().timestamp();
     if ignore_old_entries == "TRUE" && creation_seconds > now_seconds-60 {
