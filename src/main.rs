@@ -23,7 +23,7 @@ async fn main() -> Result<(),Infallible> {
   let mut ew = try_flatten_applied(watcher(events, lp)).boxed();
 
   while let Some(event) = ew.try_next().await.unwrap() {
-    let now_seconds = Utc::now().checked_sub_signed(Duration::seconds(60)).unwrap();
+    let last_minute = Utc::now().checked_sub_signed(Duration::seconds(60)).unwrap();
     let last_ts = event.last_timestamp.clone();
     let first_ts = event.first_timestamp.clone();
     let ts: DateTime<Utc> = match last_ts {
@@ -31,7 +31,7 @@ async fn main() -> Result<(),Infallible> {
       None => first_ts.unwrap_or(Time(Utc::now())).0,
     };
 
-    if ignore_old_entries == "TRUE" && ts > now_seconds {
+    if ignore_old_entries == "TRUE" && ts < last_minute {
       //entry too old
       continue;
     }else{

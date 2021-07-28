@@ -1,3 +1,7 @@
+# 0.6.0 2021-07-28
+
+* fix timestamp filtering
+
 # 0.5.0 2021-07-28
 
 * use different timestamps for log entries, try last_timestamp first, then first_timestamp, then `now`
