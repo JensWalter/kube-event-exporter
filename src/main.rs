@@ -9,6 +9,7 @@ use kube_runtime::{utils::try_flatten_applied, watcher};
 use env_var::env_var;
 use std::convert::Infallible;
 use chrono::prelude::*;
+use chrono::Duration;
 
 #[tokio::main]
 async fn main() -> Result<(),Infallible> {
@@ -22,16 +23,21 @@ async fn main() -> Result<(),Infallible> {
   let mut ew = try_flatten_applied(watcher(events, lp)).boxed();
 
   while let Some(event) = ew.try_next().await.unwrap() {
-    let creation_timestamp: Time = event.metadata.creation_timestamp.clone().unwrap_or(Time(Utc::now()));
-    let creation_seconds = creation_timestamp.0.timestamp();
-    let now_seconds = Utc::now().timestamp();
-    if ignore_old_entries == "TRUE" && creation_seconds > now_seconds-60 {
+    let now_seconds = Utc::now().checked_sub_signed(Duration::seconds(60)).unwrap();
+    let last_ts = event.last_timestamp.clone();
+    let first_ts = event.first_timestamp.clone();
+    let ts: DateTime<Utc> = match last_ts {
+      Some(t) => t.0,
+      None => first_ts.unwrap_or(Time(Utc::now())).0,
+    };
+
+    if ignore_old_entries == "TRUE" && ts > now_seconds {
       //entry too old
       continue;
     }else{
       if output_format == "PLAIN" {
         println!("[{} {}] {} [{}] {} {} {}"
-                  ,creation_timestamp.0.to_rfc3339()
+                  ,ts.to_rfc3339()
                   ,event.type_.unwrap_or("".to_string())
                   ,event.involved_object.namespace.unwrap_or("".to_string())
                   ,event.involved_object.kind.unwrap_or("".to_string())

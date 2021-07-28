@@ -1,12 +1,12 @@
-# 0.5.0 not yet released
+# 0.5.0 2021-07-28
 
-* default event timestamp if no value is present
+* use different timestamps for log entries, try last_timestamp first, then first_timestamp, then `now`
 
-# 0.4.0 2012-07-08
+# 0.4.0 2021-07-08
 
 * revert back to building kube with defaults
 
-# 0.3.0 2012-06-20
+# 0.3.0 2021-06-20
 
 * update dependencies
 
