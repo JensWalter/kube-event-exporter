@@ -1,3 +1,8 @@
+# 0.7.0 2021-12-19
+
+* switch docker base image to debian:stable-slim
+* update dependencies
+
 # 0.6.0 2021-07-28
 
 * fix timestamp filtering

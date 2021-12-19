@@ -1,7 +1,8 @@
 FROM rust as builder
+WORKDIR /app
 COPY . . 
 RUN cargo build --release
 
-FROM rockylinux/rockylinux as runner
-COPY --from=builder ./target/release/kube-event-exporter /kube-event-exporter
+FROM debian:stable-slim as runner
+COPY --from=builder /app/target/release/kube-event-exporter /kube-event-exporter
 CMD ["/kube-event-exporter"]
