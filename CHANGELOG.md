@@ -1,3 +1,7 @@
+# 0.8.0 2022-01-30
+
+* update dependencies
+
 # 0.7.0 2021-12-19
 
 * switch docker base image to debian:stable-slim
