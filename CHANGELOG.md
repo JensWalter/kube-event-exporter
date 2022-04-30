@@ -1,3 +1,7 @@
+# 0.9.0 2022-04-30
+
+* update dependencies
+
 # 0.8.0 2022-01-30
 
 * update dependencies
