@@ -1,3 +1,7 @@
+# 1.0.0 2022-12-21
+
+* update dependencies
+
 # 0.9.0 2022-04-30
 
 * update dependencies
